@@ -1,0 +1,29 @@
+name: Build VST3 (Windows)
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build VST3 + Standalone
+        run: cmake --build build --config Release --target GLTCH1024_VST3 GLTCH1024_Standalone --parallel
+
+      - name: Upload VST3
+        uses: actions/upload-artifact@v4
+        with:
+          name: GLTCH-1024-VST3-Windows
+          path: build/GLTCH1024_artefacts/Release/VST3/
+
+      - name: Upload Standalone
+        uses: actions/upload-artifact@v4
+        with:
+          name: GLTCH-1024-Standalone-Windows
+          path: build/GLTCH1024_artefacts/Release/Standalone/
